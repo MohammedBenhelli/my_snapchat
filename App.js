@@ -1,19 +1,32 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
 import Register from "./components/Register";
+import Home from "./components/Home";
 
 export default class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            connected: false
+        };
+        const getToken = async () => {
+            let token = await AsyncStorage.getItem("token");
+            if (token !== undefined)
+                this.setState({connected: true})
+        };
+        getToken()
     }
 
     render() {
-        return (
-            <View>
-                <Register/>
-            </View>
+        if (!this.state.connected)
+            return (
+                <View>
+                    <Register/>
+                </View>
+            );
+        else return (
+            <Home/>
         );
     }
 }

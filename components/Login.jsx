@@ -1,8 +1,9 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Input, Button} from 'react-native-elements';
-import {Text, View} from "react-native";
+import {Text, View, AsyncStorage} from "react-native";
 import Register from "./Register";
+import Home from "./Home";
 
 export default class Login extends React.Component {
 
@@ -12,7 +13,8 @@ export default class Login extends React.Component {
             email: "",
             password: "",
             error: "",
-            showRegister: false
+            showRegister: false,
+            showHome: false
         };
     }
 
@@ -30,13 +32,21 @@ export default class Login extends React.Component {
                     "email": this.state.email, "password": this.state.password
                 })
             }).then(response => response.json());
-            if (response.data.token !== undefined)
-                this.setState({error: `Your token is ${response.data.token}`});
+            if (response.data.token === undefined)
+                this.setState({error: `Your information are incorrect`});
+            else {
+                await AsyncStorage.setItem("token", response.data.token);
+                this.setState({showHome: true});
+            }
         }
     };
 
     render() {
-        if (!this.state.showRegister)
+        if(this.state.showHome)
+            return (
+                <Home/>
+            );
+        else if (!this.state.showRegister)
             return (
                 <View>
                     <Text style={{marginTop: 30, fontSize: 25, color: "purple"}}>
