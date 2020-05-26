@@ -1,18 +1,28 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import {StyleSheet, Text, View} from 'react-native';
+import Register from "./components/Register";
 
-export default function App() {
-  return (
-      <WebView source={{uri: 'http://www.google.fr'}} style={{marginTop: 20}}/>
-  );
+export default class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    render() {
+        return (
+            <View>
+                <Register/>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
