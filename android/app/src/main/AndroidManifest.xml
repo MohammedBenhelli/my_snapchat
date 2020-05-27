@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest ... >
-<application android:networkSecurityConfig="@xml/network_security_config"
-        ... >
-        ...
-        </application>
-        </manifest>
+<manifest>
+    <application android:networkSecurityConfig="@xml/network_security_config">
+    </application>
+    <!-- Required -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Include this only if you are planning to use the camera roll -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Include this only if you are planning to use the microphone for video recording -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+</manifest>

@@ -1,0 +1,6 @@
+implementation project(':react-native-camera')
+android {
+    defaultConfig {
+        missingDimensionStrategy 'react-native-camera', 'general' // <--- insert this line
+    }
+}

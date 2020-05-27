@@ -12,7 +12,7 @@ export default class App extends React.Component {
         };
         const getToken = async () => {
             let token = await AsyncStorage.getItem("token");
-            if (token !== undefined)
+            if (token !== null && token !== "")
                 this.setState({connected: true})
         };
         getToken()
