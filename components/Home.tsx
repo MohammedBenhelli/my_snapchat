@@ -1,17 +1,18 @@
 'use strict';
 import React, {PureComponent} from 'react';
-import {Text, View, AsyncStorage, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, View, AsyncStorage, TouchableOpacity, StyleSheet, TouchableWithoutFeedback} from "react-native";
 import {Camera} from 'expo-camera';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Messages from "./Messages";
+import UserList from "./UserList";
+import Swiper from "react-native-swiper";
 
 export default class Home extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
+            hasPermission: null,
             camera: Camera.Constants.Type.back,
-            showMessages: false,
             token: ""
         };
         const getToken = async () => {
@@ -33,14 +34,19 @@ export default class Home extends PureComponent {
         else this.setState({camera: Camera.Constants.Type.back})
     };
 
-    showMessages = () => {
-        this.setState({showMessages: true})
-    };
+    async componentDidMount(): void {
+        const {status} = await Camera.requestPermissionsAsync();
+        this.setState({hasPermission: status === "granted"})
+    }
 
     render() {
-        if (!this.state.showMessages)
-            return (
-                <View style={{flex: 1}}>
+        if (this.state.hasPermission === null)
+            return <View/>;
+        else if (this.state.hasPermission === false)
+            return <Text>No access to camera</Text>;
+        else return (
+                <Swiper>
+                    <View style={{flex: 1}}>
                         <Camera style={{flex: 1}} type={this.state.camera}>
                             <View
                                 style={{
@@ -54,24 +60,19 @@ export default class Home extends PureComponent {
                                         alignSelf: 'flex-end',
                                         alignItems: 'center',
                                     }}
-                                    onPress={this.showMessages}>
-                                    <Text style={{fontSize: 18, marginBottom: 10, color: 'white'}}> Messages </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{
-                                        flex: 0.1,
-                                        alignSelf: 'flex-end',
-                                        alignItems: 'center',
-                                    }}
                                     onPress={this.changeCamera}>
                                     <Text style={{fontSize: 18, marginBottom: 10, color: 'white'}}> Flip </Text>
                                 </TouchableOpacity>
                             </View>
                         </Camera>
-                </View>
+                    </View>
+                    <View>
+                        <Messages token={this.state.token}/>
+                    </View>
+                    <View>
+                        <UserList token={this.state.token}/>
+                    </View>
+                </Swiper>
             );
-        else return (
-            <Messages/>
-        )
     }
 }

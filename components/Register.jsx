@@ -17,19 +17,24 @@ export default class Register extends React.Component {
         };
     }
 
+    //Faut que la methode soit asynchrome pour fetch
     sendRegister = async () => {
         if (this.state.password !== this.state.passwordConf)
             this.setState({error: "The password confirmation is wrong!"});
         else {
             this.setState({error: ""});
             const response = await fetch("http://snapi.epitech.eu/inscription", {
+                //On definit le type de la requete
                 method: "POST",
+                //On definit les headers de la requete
                 headers: {
                     "Content-Type": "application/json"
                 },
+                //On met le contenu de la requette en le mettant au format JSON
                 body: JSON.stringify({
                     "email": this.state.email, "password": this.state.password
                 })
+                //On recupere le resultat de la requete
             }).then(response => response.json());
             if (response.data.email !== this.state.email)
                 this.setState({error: "Something went wrong please retry later!"});
