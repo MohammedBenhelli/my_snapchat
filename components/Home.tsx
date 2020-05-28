@@ -5,6 +5,7 @@ import {Camera} from 'expo-camera';
 import Messages from "./Messages";
 import UserList from "./UserList";
 import Swiper from "react-native-swiper";
+import * as ImagePicker from 'expo-image-picker';
 
 export default class Home extends PureComponent {
 
@@ -19,6 +20,17 @@ export default class Home extends PureComponent {
             this.setState({token: await AsyncStorage.getItem("token")})
         }
         getToken()
+    }
+
+    pickImage = async () => {
+        const options = {
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        };
+        const image = await ImagePicker.launchImageLibraryAsync(options);
+        console.log(image)
     }
 
     takePicture = async function (camera) {
@@ -50,7 +62,7 @@ export default class Home extends PureComponent {
                         <Camera style={{flex: 1}} type={this.state.camera}>
                             <View
                                 style={{
-                                    flex: 1,
+                                    flex: 0.5,
                                     backgroundColor: 'transparent',
                                     flexDirection: 'row',
                                 }}>
@@ -62,6 +74,15 @@ export default class Home extends PureComponent {
                                     }}
                                     onPress={this.changeCamera}>
                                     <Text style={{fontSize: 18, marginBottom: 10, color: 'white'}}> Flip </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{
+                                        flex: 0.2,
+                                        alignSelf: 'flex-end',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={this.pickImage}>
+                                    <Text style={{fontSize: 18, marginBottom: 10, color: 'white'}}> Open </Text>
                                 </TouchableOpacity>
                             </View>
                         </Camera>

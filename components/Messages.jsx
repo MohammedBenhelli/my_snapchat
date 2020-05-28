@@ -41,7 +41,7 @@ export default class Messages extends PureComponent {
                     <Button
                         title="Refresh"
                         onPress={this.getSnaps}
-                        style={{height: "40%"}}
+                        style={{height: 40, width: "40%"}}
                     />
                     <Text style={{fontSize: 25, color: "red"}}>
                         {this.state.error}
