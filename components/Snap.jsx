@@ -11,18 +11,40 @@ export default class Snap extends PureComponent {
             from: this.props.from,
             duration: this.props.duration,
             token: this.props.token,
-            photo: "../assets/icon.png"
+            photo: "data:image/gif;base64,"
         };
     }
 
     showSnap = async (e) => {
-        const snap = await fetch(`http://snapi.epitech.eu/snap/${this.state.snapId}`, {
-            method: "GET",
-            headers: {
-                "token": this.state.token
+         const snap = await fetch(`http://snapi.epitech.eu/snap/${this.state.snapId}`, {
+             method: "GET",
+             headers: {
+                 "token": this.state.token
+             }
+         }).then(res => res.blob())
+        .then(blob => {
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                let base64data = `data:image/gif;base64,${reader.result.split(",")[1]}`;
+                console.log(base64data);
+                this.setState({photo: base64data})
+                setTimeout(async () => {
+                    this.setState({photo: "data:image/gif;base64,"});
+                    const sup = await fetch(`http://snapi.epitech.eu/seen`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "token": this.state.token
+                        },
+                        body: JSON.stringify({
+                            "id": this.state.snapId
+                        })
+                    }).then(res => res.json());
+                    console.log(sup)
+                }, this.state.duration * 1000);
             }
         });
-        console.log(snap);
     }
 
     render() {
@@ -31,7 +53,7 @@ export default class Snap extends PureComponent {
                 <Text onPress={this.showSnap} style={{fontSize: 25, color: "blue"}}>
                     {this.state.from}
                 </Text>
-                <Image style={{height: 100, width: 100}} source={this.state.photo}/>
+                <Image style={{height: 500, width: 500}} source={{uri: this.state.photo}}/>
             </View>
         )
     }
