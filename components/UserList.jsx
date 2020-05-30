@@ -26,16 +26,15 @@ export default class UserList extends PureComponent {
     }
 
     getUsers = async () => {
-        const messages = await fetch("http://snapi.epitech.eu/all", {
+        const users = await fetch("http://snapi.epitech.eu/all", {
             method: "GET",
             headers: {
                 "token": this.state.token
             }
         }).then(response => response.json());
-        if (messages.data !== "error message")
-            this.setState({users: messages.data})
+        if (users.data !== "error message")
+            this.setState({users: users.data})
         else this.setState({error: "Try refresh your snaps!"})
-        console.log(messages);
     }
 
     render() {

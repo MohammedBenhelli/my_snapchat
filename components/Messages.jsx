@@ -2,6 +2,7 @@
 import React, {PureComponent} from 'react';
 import {Text, View, AsyncStorage, TouchableOpacity, StyleSheet} from "react-native";
 import {Button} from 'react-native-elements';
+import Snap from "./Snap";
 
 export default class Messages extends PureComponent {
 
@@ -32,6 +33,10 @@ export default class Messages extends PureComponent {
         console.log(messages);
     }
 
+    showSnap = async (e) => {
+        console.log(e)
+    }
+
     render() {
         return (
                 <View>
@@ -46,6 +51,11 @@ export default class Messages extends PureComponent {
                     <Text style={{fontSize: 25, color: "red"}}>
                         {this.state.error}
                     </Text>
+                    {
+                        this.state.snaps.map((x, i) => (
+                            <Snap snapId={x.snap_id} from={x.from} key={i} token={this.state.token} duration={x.duration}/>
+                        ))
+                    }
                 </View>
         )
     }
